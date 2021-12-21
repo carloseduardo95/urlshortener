@@ -4,6 +4,8 @@ import br.com.carloseduardo.urlshortener.dto.ShortenerSimpleDTO;
 import br.com.carloseduardo.urlshortener.model.Shortener;
 import br.com.carloseduardo.urlshortener.service.ShortenerService;
 import com.google.gson.Gson;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ public class UrlShortenerController {
     private final ShortenerService shortenerService;
     private static final Gson gson = new Gson();
     private static final String LOCAL_HOST = "http://localhost:8080/";
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     UrlShortenerController(ShortenerService shortenerService) {
         this.shortenerService = shortenerService;
@@ -40,7 +43,7 @@ public class UrlShortenerController {
             result.put("urlEncurtada", LOCAL_HOST + resp.getShortUrl());
             result.put("shortUrl", resp.getShortUrl());
         } catch (Exception e) {
-            System.out.println("Erro -> " + e.getMessage());
+            logger.error("Erro -> " + e.getMessage());
             result.put("erro", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(gson.toJson(result));
         }
@@ -68,7 +71,7 @@ public class UrlShortenerController {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Erro -> " + e.getMessage());
+            logger.error("Erro -> " + e.getMessage());
             response.put("erro", e.getMessage());
             result = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(gson.toJson(response));
         }

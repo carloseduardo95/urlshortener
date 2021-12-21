@@ -9,7 +9,6 @@ public class IndexController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("nome", "calos eduardo");
         return "index";
     }
 }
